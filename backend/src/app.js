@@ -22,12 +22,7 @@ app.use(express.urlencoded({ limit: "40kb", extended: true }));
 // API routes
 app.use("/api/v1/users", userRoutes);
 
-// Root route for testing
-app.get("/", (req, res) => {
-    res.send("Backend is running!");
-});
-
-// Serve React frontend if build exists
+// Serve React frontend
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("*", (req, res) => {
@@ -37,9 +32,10 @@ app.get("*", (req, res) => {
 // Start server and connect to MongoDB
 const start = async () => {
     try {
-        const connectionDb = await mongoose.connect(
-            process.env.MONGO_URI || "mongodb+srv://Reezo75:Reezo%4075@reezo75.vvmxppw.mongodb.net/Reezo75?retryWrites=true&w=majority&appName=Reezo75"
-        );
+        // Use environment variable for MongoDB URI if set, otherwise fallback to hardcoded URI
+        const mongoURI = process.env.MONGO_URI || "mongodb+srv://Reezo75:Reezo%4075@reezo75.vvmxppw.mongodb.net/Reezo75?retryWrites=true&w=majority&appName=Reezo75";
+
+        const connectionDb = await mongoose.connect(mongoURI);
 
         console.log(`MONGO Connected DB Host: ${connectionDb.connection.host}`);
 
