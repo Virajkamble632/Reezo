@@ -383,13 +383,24 @@ export default function VideoMeetComponent() {
     }
 
     let handleVideo = () => {
-        setVideo(!video);
-        // getUserMedia();
+    if (window.localStream) {
+        let videoTrack = window.localStream.getVideoTracks()[0];
+        if (videoTrack) {
+            videoTrack.enabled = !videoTrack.enabled; // toggle without stopping
+            setVideo(videoTrack.enabled);
+        }
     }
+    }
+
     let handleAudio = () => {
-        setAudio(!audio)
-        // getUserMedia();
+    if (window.localStream) {
+        let audioTrack = window.localStream.getAudioTracks()[0];
+        if (audioTrack) {
+            audioTrack.enabled = !audioTrack.enabled;
+            setAudio(audioTrack.enabled);
+        }
     }
+};
 
     useEffect(() => {
         if (screen !== undefined) {
