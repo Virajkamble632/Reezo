@@ -19,14 +19,14 @@ const ChatPanel = ({ messages = [], sendMessage, user }) => {
   };
 
   return (
-    <div className="fixed right-6 top-28 flex h-[70vh] w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 backdrop-blur-xl">
+    <div className="fixed right-3 left-3 top-20 w-auto sm:left-auto sm:right-4 sm:w-80 md:right-6 md:w-72 flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 backdrop-blur-xl">
 
       {/* Header */}
 
       <div className="border-b border-white/10 p-4">
 
         <h2 className="text-lg font-semibold text-white">
-          💬 Meeting Chat
+           Chat
         </h2>
 
       </div>

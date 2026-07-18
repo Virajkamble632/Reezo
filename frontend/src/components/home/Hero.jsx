@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen bg-[#030712] overflow-hidden">
+    <section id="home" className="relative overflow-hidden bg-[#030712] min-h-screen">
 
       {/* Background */}
       <div className="absolute inset-0">
@@ -11,32 +11,19 @@ const Hero = () => {
         <div className="absolute right-0 bottom-0 h-[450px] w-[450px] rounded-full bg-violet-600/20 blur-[160px]" />
       </div>
 
-      <div className="relative z-10 max-w-[1450px] mx-auto px-8 lg:px-12 pt-36">
+      <div className="relative z-10 mx-auto max-w-[1450px] px-5 pt-28 sm:px-6 sm:pt-32 md:px-8 md:pt-36 lg:px-12">
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid gap-14 lg:grid-cols-2 lg:gap-16 items-center">
 
           {/* LEFT */}
 
           <div>
 
-            <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-xl"
-            >
+            <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
 
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-5 py-2">
+            
 
-                <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span>
-
-                <span className="text-sm font-medium text-blue-300">
-                Modern Video Meetings
-                </span>
-
-            </div>
-
-            <h1 className="mt-8 text-6xl xl:text-7xl font-extrabold leading-tight">
+            <h1 className="mt-8 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl xl:text-7xl">
 
                 <span className="text-white">
                 Meet.
@@ -56,7 +43,7 @@ const Hero = () => {
 
             </h1>
 
-            <p className="mt-8 text-lg leading-8 text-slate-400">
+            <p className="mt-6 max-w-xl text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
 
                 Experience crystal-clear HD video meetings powered by WebRTC.
                 Collaborate instantly with your team using screen sharing,
@@ -64,7 +51,7 @@ const Hero = () => {
 
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-5">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:gap-5">
 
                 <button className="rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-8 py-4 font-semibold text-white transition hover:scale-105 hover:shadow-[0_15px_40px_rgba(37,99,235,.35)]">
 
@@ -102,43 +89,6 @@ const Hero = () => {
 
             </div>
 
-            <div className="mt-12 flex items-center gap-5">
-
-                <div className="flex -space-x-3">
-
-                {["A", "E", "J", "V"].map((user) => (
-
-                    <div
-                    key={user}
-                    className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#030712] bg-gradient-to-br from-blue-500 to-violet-600 font-bold text-white"
-                    >
-
-                    {user}
-
-                    </div>
-
-                ))}
-
-                </div>
-
-                <div>
-
-                <h3 className="font-semibold text-white">
-
-                    Trusted by 10,000+ Professionals
-
-                </h3>
-
-                <p className="text-sm text-slate-400">
-
-                    Secure meetings across 120+ countries.
-
-                </p>
-
-                </div>
-
-            </div>
-
             </motion.div>
 
           </div>
@@ -157,7 +107,7 @@ const Hero = () => {
             <motion.div
                 animate={{ y: [0, -12, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -left-10 top-9 z-30 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5"
+                className="absolute -left-4 xl:-left-10 top-9 z-30 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5"
             >
                 <p className="text-xs text-slate-400">
                 Security
@@ -177,7 +127,7 @@ const Hero = () => {
             <motion.div
                 animate={{ y: [0, 12, 0] }}
                 transition={{ duration: 5, repeat: Infinity }}
-                className="absolute -right-8 bottom-20 z-30 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5"
+                className="absolute -right-2 xl:-right-8 bottom-20 z-30 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5"
             >
                 <p className="text-xs text-slate-400">
                 Network
@@ -194,7 +144,7 @@ const Hero = () => {
 
             {/* Meeting Window */}
 
-            <div className="w-[620px] rounded-[34px] border border-white/10 bg-[#0F172A]/80 backdrop-blur-2xl overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,.45)]">
+            <div className="w-full max-w-[620px] rounded-[34px] border border-white/10 bg-[#0F172A]/80 backdrop-blur-2xl overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,.45)]">
 
                 {/* Header */}
 
@@ -226,7 +176,7 @@ const Hero = () => {
 
                 {/* Participants */}
 
-                <div className="grid grid-cols-2 gap-4 p-5">
+                <div className="     grid grid-cols-2 gap-4 p-5">
 
                 {[
                     {
@@ -249,7 +199,7 @@ const Hero = () => {
 
                     <div
                     key={index}
-                    className="relative h-48 overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
+                    className="relative aspect-video overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
                     >
 
                     <img
@@ -284,7 +234,7 @@ const Hero = () => {
 
                 <div className="border-t border-white/10 p-5">
 
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-2 xl:gap-4">
 
                     {[
                     "🎤",
@@ -296,7 +246,7 @@ const Hero = () => {
 
                     <button
                         key={index}
-                        className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl transition hover:-translate-y-1 hover:bg-white/10"
+                        className="flex h-12 w-12 xl:h-14 xl:w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl transition hover:-translate-y-1 hover:bg-white/10"
                     >
                         {icon}
                     </button>

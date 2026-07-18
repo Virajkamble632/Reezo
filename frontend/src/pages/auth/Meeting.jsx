@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import socket from "../../socket/socket";
 import { useAuth } from "../../context/AuthContext";
@@ -7,122 +7,80 @@ import { useAuth } from "../../context/AuthContext";
 import MeetingHeader from "../../components/meeting/MeetingHeader";
 import VideoGrid from "../../components/meeting/VideoGrid";
 import MeetingControls from "../../components/meeting/MeetingControls";
-import ParticipantsPanel from "../../components/meeting/ParticipantsPanel";
-import ChatPanel from "../../components/meeting/ChatPanel";
 import MeetingSidebar from "../../components/meeting/MeetingSidebar";
-import useMediaStream from "../../hooks/useMediaStream";
-import useWebRTC from "../../hooks/useWebRTC";
 
-console.log("Meeting Component Rendered");
+import useLivekit from "../../hooks/useLiveKit";
+
 const Meeting = () => {
-
-  const { roomId } = useParams();
   const { user } = useAuth();
+  const { roomId } = useParams();
+  const navigate = useNavigate();
 
-  const localStream = useMediaStream();
-  const {peersRef, remoteStreams,  remoteUsers, participantsState } = useWebRTC(roomId, localStream, user);
+  const {
+    room: livekitRoom,
+    localParticipant,
+    localVideoTrack,
+    participants: livekitParticipants,
+    toggleScreenShare,
+  } = useLivekit(roomId, user);
 
-  const [participants, setParticipants] = useState([]);
-  const [meeting, setMeeting] = useState([]);
   const [sidebar, setSidebar] = useState(null);
-  const [cameraOn, setCameraOn] = useState(true);
-  const [micOn, setMicOn] = useState(true);
-  const [screenSharing, setScreenSharing] = useState(false);
   const [messages, setMessages] = useState([]);
 
-  const toggleCamera = () => {
-    if (!localStream) return;
+  // ================= LOCAL STATES =================
 
-    const videoTrack = localStream.getVideoTracks()[0];
+  const cameraOn =
+    livekitRoom?.localParticipant?.isCameraEnabled ?? false;
 
-    if(!videoTrack) return;
+  const micOn =
+    livekitRoom?.localParticipant?.isMicrophoneEnabled ?? false;
 
-    videoTrack.enabled = !videoTrack.enabled;
+  const screenSharing =
+    livekitRoom?.localParticipant?.isScreenShareEnabled ?? false;
 
-    setCameraOn(videoTrack.enabled);
+  // ================= LEAVE MEETING =================
 
-    console.log("Emitting camera-toggle...");
+  const leaveMeeting = () => {
+    try {
+      // Tell Socket.IO server that you're leaving
+      socket.emit("leave-room", { roomId });
 
-    socket.emit("camera-toggle", {
-      roomId,
-      cameraOn: videoTrack.enabled,
-      user,
-    });
-  }
+      // Disconnect from LiveKit
+      if (livekitRoom) {
+        livekitRoom.disconnect();
+      }
 
-  const toggleMic = () => {
-    if (!localStream) return;
-
-    const audioTrack = localStream.getAudioTracks()[0];
-
-    if(!audioTrack) return;
-
-    audioTrack.enabled = !audioTrack.enabled;
-
-    setMicOn(audioTrack.enabled);
-
-    console.log("Emitting mic-toggle...");
-
-    socket.emit("mic-toggle", {
-      roomId,
-      micOn: audioTrack.enabled,
-      user,
-    })
-  }
-
-  const toggleScreenShare = async() => {
-    try{
-
-      if(!screenSharing) {
-
-        const screenStream = await navigator.mediaDevices.getDisplayMedia({ video:true });
-
-        const screenTrack = screenStream.getVideoTracks()[0];
-
-        Object.values(peersRef.current).forEach((peer) => {
-
-              const sender = peer.getSenders().find((sender) => sender.track?.kind === "video");
-
-              if(sender) { 
-                sender.replaceTrack(screenTrack);
-              }
-
-        });
-
-        setScreenSharing(true);
-
-        console.log("Screen Sharing Started");
-
-        // When users click stop sharing
-        screenTrack.onended = () => {
-          
-          const cameraTrack = localStream.getVideoTracks()[0];
-
-          Object.values(peersRef.current).forEach((peer) => {
-
-            const sender = peer.getSenders().find((sender) => sender.track?.kind === "Video");
-
-            if(sender && cameraTrack) {
-              sender.replaceTrack(cameraTrack);
-            }
-
-          });
-
-          setScreenSharing(false);
-
-          console.log("Screen Sharing Stopped");
-        };
-      } 
-    } catch(err){
-
-      console.log(err);
-
+      // Navigate back
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Leave Meeting Error:", error);
     }
-  }
+  };
+
+  // ================= CAMERA =================
+
+  const toggleCamera = async () => {
+    if (!livekitRoom) return;
+
+    await livekitRoom.localParticipant.setCameraEnabled(
+      !livekitRoom.localParticipant.isCameraEnabled
+    );
+  };
+
+  // ================= MIC =================
+
+  const toggleMic = async () => {
+    if (!livekitRoom) return;
+
+    await livekitRoom.localParticipant.setMicrophoneEnabled(
+      !livekitRoom.localParticipant.isMicrophoneEnabled
+    );
+  };
+
+  // ================= CHAT =================
 
   const sendMessage = (message) => {
-
-    if(!message.trim()) return;
+    if (!message.trim()) return;
 
     socket.emit("send-message", {
       roomId,
@@ -131,24 +89,19 @@ const Meeting = () => {
     });
   };
 
+  // ================= JOIN SOCKET ROOM =================
+
   useEffect(() => {
+    if (!roomId) return;
 
-    if (!user) return;
-
-    // Join Socket Room
-    console.log("Joining room:", roomId);
-    console.log("JOIN ROOM EMITTED");
-    // socket.emit("join-room", { roomId, user, });
-    socket.onAny((event, ...args) => {
-      console.log("Socket Event:", event, args);
+    socket.emit("join-room", {
+      roomId,
     });
-    console.log("Socket Connected:", socket.connected);
-    console.log("Socket ID:", socket.id);
+  }, [roomId]);
 
-  }, [roomId, user]);
+  // ================= RECEIVE CHAT =================
 
   useEffect(() => {
-
     const handleMessage = (data) => {
       setMessages((prev) => [...prev, data]);
     };
@@ -156,72 +109,87 @@ const Meeting = () => {
     socket.on("receive-message", handleMessage);
 
     return () => {
-      socket.off("reive-message", handleMessage);
+      socket.off("receive-message", handleMessage);
     };
   }, []);
+
+  // ================= DEBUG =================
 
   useEffect(() => {
+    if (livekitRoom) {
+      console.log("Connected to LiveKit Room");
+    }
+  }, [livekitRoom]);
 
-    const handleParticipants = (users) => {
+  useEffect(() => {
+    if (localVideoTrack) {
+      console.log("Local Video Track:", localVideoTrack);
+    }
+  }, [localVideoTrack]);
 
-      console.log("Participants", users);
+  useEffect(() => {
+    if (localParticipant) {
+      console.log("Local Participant:", localParticipant);
+    }
+  }, [localParticipant]);
 
-      setParticipants(users);
+  useEffect(() => {
+    console.log("Remote Participants:", livekitParticipants);
+  }, [livekitParticipants]);
 
-    };
+  // ================= PARTICIPANTS =================
 
-    socket.on("participants-update", handleParticipants);
+  const remoteParticipants = livekitParticipants;
 
-    return () => {
-      socket.off("participans-update", handleParticipants);
-    };
-  }, []);
-
-  console.log("Camera State:", cameraOn);
+  const allParticipants = [
+    ...(localParticipant ? [localParticipant] : []),
+    ...livekitParticipants,
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-950 p-6">
-
+    <div className="min-h-screen bg-slate-950 p-3 sm:p-4 md:p-6">
       <MeetingHeader
         roomId={roomId}
         setSidebar={setSidebar}
       />
 
-      <div className="mt-6 flex gap-6">
+      <div className="mt-6 flex flex-col gap-6">
+        {/* VIDEO GRID */}
 
-        {/* Video Area */}
-        <div className="flex-1">
-          <VideoGrid 
-            localStream={localStream}
-            remoteStreams={remoteStreams}
-            remoteUsers={remoteUsers} 
-            participantsState={participantsState}
-            user={user} 
-            cameraOn={cameraOn}/>
+        <div className="flex-1 min-w-0">
+          <VideoGrid
+            localVideoTrack={localVideoTrack}
+            participants={remoteParticipants}
+            user={user}
+            cameraOn={cameraOn}
+            screenSharing={screenSharing}
+          />
         </div>
 
-        {/* Sidebar */}
+        {/* SIDEBAR */}
+
         <MeetingSidebar
           sidebar={sidebar}
-          participants={participants}
+          participants={allParticipants}
           messages={messages}
           sendMessage={sendMessage}
           user={user}
         />
-
       </div>
 
+      {/* CONTROLS */}
+
       <MeetingControls
-        setSidebar={setSidebar}
         sidebar={sidebar}
+        setSidebar={setSidebar}
         cameraOn={cameraOn}
         toggleCamera={toggleCamera}
         micOn={micOn}
         toggleMic={toggleMic}
         screenSharing={screenSharing}
         toggleScreenShare={toggleScreenShare}
-        />
-
+        leaveMeeting={leaveMeeting}
+      />
     </div>
   );
 };

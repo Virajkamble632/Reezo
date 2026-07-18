@@ -9,6 +9,7 @@ import meetingRoutes from './routes/meetingRoutes.js';
 import http from 'http';
 import { Server } from 'socket.io';
 import { initializeSocket } from './socket/socket.js';
+import livekitRoutes from './routes/livekit.routes.js';
 
 
 //Loading enviroment variables
@@ -43,6 +44,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/meeting', meetingRoutes);
+app.use('/api/livekit', livekitRoutes);
 
 //Home Route
 app.get('/', (req, res) => {

@@ -1,9 +1,10 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff, FiMail, FiLock } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
+import { ArrowLeft } from "lucide-react";
 
 import api from "../../utils/api";
 import AuthLayout from "../../components/auth/AuthLayout";
@@ -55,133 +56,114 @@ const Login = () => {
   };
 
   return (
-    <AuthLayout
-      title="Welcome Back"
-      subtitle="Login to continue your meetings." 
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6"
-      >
-        {/* Email */}
 
-        <div className="relative">
+    <>  
+      {/* <div className="mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition">
+              <ArrowLeft size={18}/>
+              <span>Back to home</span>
+          </Link>
+      </div> */}
 
-          <FiMail
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
-            size={20}
-          />
+      <AuthLayout title="Welcome Back" subtitle="Login to continue your meetings.">
+        <form onSubmit={handleSubmit} className="space-y-6" >
+          {/* Email */}
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 py-4 pl-14 pr-4 text-white outline-none transition focus:border-blue-500"
-          />
+          <div className="relative">
 
-        </div>
+            <FiMail
+              className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
+              size={20}
+            />
 
-        {/* Password */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 py-4 pl-14 pr-4 text-white outline-none transition focus:border-blue-500"
+            />
 
-        <div className="relative">
+          </div>
 
-          <FiLock
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
-            size={20}
-          />
+          {/* Password */}
 
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 py-4 pl-14 pr-14 text-white outline-none transition focus:border-blue-500"
-          />
+          <div className="relative">
+
+            <FiLock
+              className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
+              size={20}
+            />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 py-4 pl-14 pr-14 text-white outline-none transition focus:border-blue-500"
+            />
+
+            <button
+              type="button"
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400"
+            >
+              {showPassword ? (
+                <FiEyeOff size={20} />
+              ) : (
+                <FiEye size={20} />
+              )}
+            </button>
+
+          </div>
+
+          {/* Forgot */}
+
+          <div className="flex justify-end">
+
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-400 hover:text-blue-300"
+            >
+              Forgot Password?
+            </Link>
+
+          </div>
+
+          {/* Login */}
 
           <button
-            type="button"
-            onClick={() =>
-              setShowPassword(!showPassword)
-            }
-            className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400"
+            disabled={loading}
+            className="w-full rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 py-4 font-semibold text-white transition hover:scale-[1.02]"
           >
-            {showPassword ? (
-              <FiEyeOff size={20} />
-            ) : (
-              <FiEye size={20} />
-            )}
+            {loading ? "Logging In..." : "Login"}
           </button>
 
-        </div>
+          {/* Register */}
 
-        {/* Forgot */}
+          <p className="text-center text-slate-400">
 
-        <div className="flex justify-end">
+            Don't have an account?{" "}
 
-          <Link
-            to="/forgot-password"
-            className="text-sm text-blue-400 hover:text-blue-300"
-          >
-            Forgot Password?
-          </Link>
+            <Link
+              to="/register"
+              className="font-semibold text-blue-400 hover:text-blue-300"
+            >
+              Register
+            </Link>
 
-        </div>
+          </p>
 
-        {/* Login */}
+        </form>
+      </AuthLayout>
+    </>
+    
 
-        <button
-          disabled={loading}
-          className="w-full rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 py-4 font-semibold text-white transition hover:scale-[1.02]"
-        >
-          {loading ? "Logging In..." : "Login"}
-        </button>
-
-        {/* Divider */}
-
-        <div className="flex items-center gap-4">
-
-          <div className="h-px flex-1 bg-white/10" />
-
-          <span className="text-sm text-slate-400">
-            OR
-          </span>
-
-          <div className="h-px flex-1 bg-white/10" />
-
-        </div>
-
-        {/* Google */}
-
-        <button
-          type="button"
-          className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 py-4 text-white transition hover:bg-white/10"
-        >
-          <FcGoogle size={24} />
-
-          Continue with Google
-
-        </button>
-
-        {/* Register */}
-
-        <p className="text-center text-slate-400">
-
-          Don't have an account?{" "}
-
-          <Link
-            to="/register"
-            className="font-semibold text-blue-400 hover:text-blue-300"
-          >
-            Register
-          </Link>
-
-        </p>
-
-      </form>
-    </AuthLayout>
+ 
   );
 };
 

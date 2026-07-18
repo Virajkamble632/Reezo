@@ -1,43 +1,42 @@
-import {
-  LayoutDashboard,
-  Video,
-  CalendarDays,
-  Users,
-  BarChart3,
-  Settings,
-} from "lucide-react";
+import { LayoutDashboard, Video, CalendarDays, Users, BarChart3,  Settings, } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const menuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    active: true,
+    path: "/dashboard",
   },
   {
     title: "Meetings",
     icon: Video,
+    path: "/meetings",
   },
   {
     title: "Schedule",
     icon: CalendarDays,
+    path: "/schedule",
   },
   {
     title: "Contacts",
     icon: Users,
+    path: "/contacts",
   },
   {
     title: "Analytics",
     icon: BarChart3,
+    path: "/analytics",
   },
   {
     title: "Settings",
     icon: Settings,
+    path: "/settings",
   },
 ];
 
 const DashboardSidebar = () => {
   return (
-    <aside className="hidden lg:flex w-72 flex-col border-r border-white/10 bg-[#111827]/80 backdrop-blur-xl">
+    <aside className="hidden xl:flex sticky top-20 h-[calc(100vh-80px)] w-72 flex-col border-r border-white/10 bg-[#111827]/80 backdrop-blur-xl">
 
       <div className="p-6">
 
@@ -58,23 +57,28 @@ const DashboardSidebar = () => {
           const Icon = item.icon;
 
           return (
-            <button
-              key={item.title}
-              className={`mb-3 flex w-full items-center gap-4 rounded-2xl px-5 py-4 transition ${
-                item.active
-                  ? "bg-gradient-to-r from-blue-600 to-violet-600 text-white"
-                  : "text-slate-400 hover:bg-white/5 hover:text-white"
-              }`}
-            >
 
+            <NavLink
+              key={item.title}
+              to={item.path}
+              className={({ isActive }) =>
+                `mb-3 flex items-center gap-4 rounded-2xl px-5 py-4 transition ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg"
+                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                }`
+              }
+            >
               <Icon size={22} />
 
               <span className="font-medium">
                 {item.title}
               </span>
 
-            </button>
+            </NavLink>
+
           );
+
         })}
 
       </nav>
@@ -87,7 +91,7 @@ const DashboardSidebar = () => {
             Upgrade Pro
           </h3>
 
-          <p className="mt-2 text-sm text-blue-100">
+          <p className="mt-2 text-sm leading-6 text-blue-100">
             Unlock unlimited meetings and premium collaboration features.
           </p>
 

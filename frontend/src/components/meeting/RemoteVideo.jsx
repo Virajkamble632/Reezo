@@ -1,34 +1,26 @@
 import { useEffect, useRef } from "react";
 
-const RemoteVideo = ({ stream }) => {
-    const videoRef = useRef(null);
+const RemoteVideo = ({ track }) => {
+  const videoRef = useRef(null);
 
-    useEffect(() => {
-        if (!stream || !videoRef.current) return;
+  useEffect(() => {
+    if (!track || !videoRef.current) return;
 
-        console.log("Assigning Remote Stream:", stream);
+    track.attach(videoRef.current);
 
-        videoRef.current.srcObject = stream;
+    return () => {
+      track.detach(videoRef.current);
+    };
+  }, [track]);
 
-        videoRef.current
-            .play()
-            .then(() => {
-                console.log("Remote Video Playing");
-            })
-            .catch((err) => {
-                console.error("Remote Play Error:", err);
-            });
-
-    }, [stream]);
-
-    return (
-        <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full h-full object-cover"
-        />
-    );
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      playsInline
+      className="w-full h-full object-cover"
+    />
+  );
 };
 
 export default RemoteVideo;

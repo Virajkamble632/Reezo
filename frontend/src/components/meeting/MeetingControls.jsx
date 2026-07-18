@@ -10,7 +10,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 
-const MeetingControls = ({sidebar, setSidebar, cameraOn, toggleCamera, micOn, toggleMic,screenSharing, toggleScreenShare, }) => {
+const MeetingControls = ({sidebar, setSidebar, cameraOn, toggleCamera, micOn, toggleMic,screenSharing, toggleScreenShare, leaveMeeting }) => {
 
   const toggleParticipants = () => {
     if(sidebar === "participants"){
@@ -29,12 +29,12 @@ const MeetingControls = ({sidebar, setSidebar, cameraOn, toggleCamera, micOn, to
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
+    <div className="fixed bottom-6 left-1/2 z-50 -w-fit -max-w-[95vw] -translate-x-1/2 px-2">
 
-      <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-slate-900/80 px-6 py-4 backdrop-blur-xl shadow-2xl">
+      <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-2 backdrop-blur-xl shadow-2xl sm:gap-3 sm:py-3 sm:px-5 md:gap-4 md:px-6 md:py-4">
 
         {/* Mic */}
-        <button onClick={toggleMic} className={`flex h-12 w-12 items-center justify-center rounded-full text-white transition ${
+        <button onClick={toggleMic} className={`flex h-10 w-10 sm:h-11 sm:w-11 md:h-12 m:h-12 items-center justify-center rounded-full text-white transition ${
             micOn
               ? "bg-slate-800 hover:bg-slate-700"
               : "bg-red-600 hover:bg-red-700"
@@ -80,7 +80,7 @@ const MeetingControls = ({sidebar, setSidebar, cameraOn, toggleCamera, micOn, to
         </button>
         
         {/* Leave */}
-        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white transition hover:bg-red-700">
+        <button onClick={leaveMeeting} className="flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white transition hover:bg-red-700">
           <FiPhoneOff size={20} />
         </button>
 

@@ -25,12 +25,7 @@ const ForgotPassword = () => {
         email,
       });
 
-
-console.log("Status:", response.status);
-
- data = await response.json();
-
-console.log(data);
+      console.log(data);
 
       toast.success(data.message);
 

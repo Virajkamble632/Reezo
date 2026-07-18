@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const AuthLayout = ({ title, subtitle, children }) => {
   return (
@@ -58,7 +60,13 @@ const AuthLayout = ({ title, subtitle, children }) => {
           duration: .6,
         }}
         className="relative z-10 w-full max-w-md rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl p-10"
-      >
+      > 
+          <div className="mb-8">
+            <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition">
+              <ArrowLeft size={18} />
+              Back to Home
+            </Link>
+          </div>
 
         {/* Logo */}
 

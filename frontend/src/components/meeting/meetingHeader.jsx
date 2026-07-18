@@ -13,7 +13,7 @@ const MeetingHeader = ({ roomId, setSidebar }) => {
   };
 
   return (
-    <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-xl">
+    <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3 sm:p-4 md:p-6 backdrop-blur-xl">
 
       {/* Left */}
       <div>

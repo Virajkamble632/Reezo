@@ -1,24 +1,58 @@
-import { Bell, Search, ChevronDown, LogOut } from "lucide-react";
+import { Bell, Search, ChevronDown, LogOut, Menu, X, LayoutDashboard, Video, CalendarDays, Users, BarChart3, Settings, } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 const DashboardNavbar = () => {
   const { user, logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+const handleLogout = async () => {
+  try {
     await logout();
 
     toast.success("Logged out successfully.");
 
-    navigate("/login");
-  };
+    navigate("/", { replace: true });
+  } catch (error) {
+    toast.error("Failed to logout.");
+    console.error(error);
+  }
+};
+
+  const menuItems = [
+    {
+      title: "Dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Meetings",
+      icon: Video,
+    },
+    {
+      title: "Schedule",
+      icon: CalendarDays,
+    },
+    {
+      title: "Contacts",
+      icon: Users,
+    },
+    {
+      title: "Analytics",
+      icon: BarChart3,
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+    },
+  ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#111827]/80 backdrop-blur-2xl">
 
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
 
@@ -47,39 +81,11 @@ const DashboardNavbar = () => {
         </div>
 
         {/* Search */}
-
-        <div className="hidden w-full max-w-md lg:block">
-
-          <div className="relative">
-
-            <Search
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"
-              size={18}
-            />
-
-            <input
-              type="text"
-              placeholder="Search meetings..."
-              className="w-full rounded-2xl border border-white/10 bg-white/5 py-3 pl-12 pr-5 text-white outline-none transition focus:border-blue-500"
-            />
-
-          </div>
-
-        </div>
+ 
 
         {/* Right */}
 
         <div className="flex items-center gap-4">
-
-          {/* Notification */}
-
-          <button className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10">
-
-            <Bell size={20} className="text-white" />
-
-            <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-red-500"></span>
-
-          </button>
 
           {/* User */}
 
@@ -91,7 +97,7 @@ const DashboardNavbar = () => {
               className="h-11 w-11 rounded-full"
             />
 
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
 
               <h3 className="font-semibold text-white">
                 {user?.name}
@@ -102,11 +108,6 @@ const DashboardNavbar = () => {
               </p>
 
             </div>
-
-            <ChevronDown
-              size={18}
-              className="text-slate-400"
-            />
 
           </div>
 
@@ -120,6 +121,8 @@ const DashboardNavbar = () => {
             <LogOut size={18} className="text-white" />
 
           </button>
+
+         
 
         </div>
 

@@ -1,14 +1,17 @@
 import { useEffect, useRef } from "react";
 
-const LocalVideo = ({ localStream }) => {
-
+const LocalVideo = ({ localVideoTrack }) => {
     const videoRef = useRef(null);
 
     useEffect(() => {
-        if (localStream && videoRef.current) {
-            videoRef.current.srcObject = localStream;
-        }
-    }, [localStream]);
+        if (!localVideoTrack || !videoRef.current) return;
+
+        localVideoTrack.attach(videoRef.current);
+
+        return () => {
+            localVideoTrack.detach(videoRef.current);
+        };
+    }, [localVideoTrack]);
 
     return (
         <video

@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  HiOutlineMenuAlt3,
-  HiX,
-  HiChevronDown,
-} from "react-icons/hi";
-
-import {
-  FiArrowRight,
-} from "react-icons/fi";
+import { HiOutlineMenuAlt3, HiX, HiChevronDown, } from "react-icons/hi";
+import { FiArrowRight, } from "react-icons/fi";
 
 const Navbar = () => {
 
@@ -33,60 +26,27 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-
     {
       name: "Home",
-      path: "/",
+      id: "home",
     },
-
     {
       name: "Features",
-      path: "#features",
+      id: "features",
     },
-
     {
-      name: "Pricing",
-      path: "#pricing",
-    },
-
-    {
-      name: "Contact",
-      path: "#contact",
-    },
-
+      name: "About",
+      id: "about"
+    }
   ];
 
   return (
 
     <>
 
-      <motion.header
+      <motion.header initial={{ y: -70, opacity: 0, }} animate={{ y: 0, opacity: 1, }} transition={{ duration: .55, }}className="fixed top-0 left-0 w-full z-50 px-6 pt-5">
 
-        initial={{
-          y: -70,
-          opacity: 0,
-        }}
-
-        animate={{
-          y: 0,
-          opacity: 1,
-        }}
-
-        transition={{
-          duration: .55,
-        }}
-
-        className="fixed top-0 left-0 w-full z-50 px-6 pt-5"
-
-      >
-
-        <div
-          className={`
-          max-w-[1500px]
-          mx-auto
-          transition-all
-          duration-300
-          rounded-3xl
+        <div className={` max-w-[1500px] mx-auto transition-all duration-300 rounded-3xl
 
           ${
             scrolled
@@ -97,21 +57,13 @@ const Navbar = () => {
           `}
         >
 
-          <div
-            className="
-            h-20
-            px-8
-            grid
-            grid-cols-[240px_1fr_240px]
-            items-center
-            "
-          >
+          <div className=" h-20 px-5 flex items-center justify-between lg:grid lg:grid-cols-[240px_1fr_240px] lg:px-8 ">
 
             {/* ===================== LOGO ===================== */}
 
             <Link
               to="/"
-              className="flex items-center gap-4"
+              className="flex items-center gap-4 flex-shrink-0"
             >
 
               <div
@@ -188,87 +140,36 @@ const Navbar = () => {
 
             <nav
               className="
-              hidden
-              lg:flex
-              justify-center
-              items-center
-              gap-12
+                hidden
+                lg:flex
+                justify-center
+                items-center
+                gap-12
               "
             >
-
               {navLinks.map((item) => (
-
-                <NavLink
-
-                  key={item.name}
-
-                  to={item.path}
-
-                  className={({ isActive }) =>
-
-                    `
-
-                    relative
-
-                    text-[15px]
-
-                    font-medium
-
-                    transition-all
-
-                    duration-300
-
-                    ${
-                      isActive
-                        ? "text-white"
-                        : "text-slate-400 hover:text-white"
-                    }
-
-                    `
-
+                <button
+                  key={item.id}
+                  onClick={() =>
+                    document
+                      .getElementById(item.id)
+                      ?.scrollIntoView({
+                        behavior: "smooth",
+                      })
                   }
-
-                >
-
-                  {item.name}
-
-                  <span
-
-                    className="
-                    absolute
-
-                    left-1/2
-
-                    -bottom-3
-
-                    h-[2px]
-
-                    w-0
-
-                    -translate-x-1/2
-
-                    rounded-full
-
-                    bg-gradient-to-r
-
-                    from-blue-500
-
-                    to-violet-500
-
+                  className="
+                    relative
+                    text-[15px]
+                    font-medium
+                    text-slate-400
                     transition-all
-
                     duration-300
-
-                    group-hover:w-full
-
-                    "
-
-                  />
-
-                </NavLink>
-
+                    hover:text-white
+                  "
+                >
+                  {item.name}
+                </button>
               ))}
-
             </nav>
 
             {/* ===================== RIGHT ===================== */}
@@ -282,7 +183,7 @@ const Navbar = () => {
               gap-5
               "
             >
-                          <Link
+              <Link
                 to="/login"
                 className="
                 text-[15px]
@@ -340,14 +241,7 @@ const Navbar = () => {
 
             {/* Mobile Button */}
 
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="
-              lg:hidden
-              justify-self-end
-              text-white
-              "
-            >
+            <button onClick={() => setMobileOpen(true)} className=" ml-auto lg:hidden flex items-center justify-center text-white ">
               <HiOutlineMenuAlt3 size={28} />
             </button>
 
@@ -447,77 +341,56 @@ const Navbar = () => {
         <div className="flex flex-col px-8 py-8 gap-7">
 
           {navLinks.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                document
+                  .getElementById(item.id)
+                  ?.scrollIntoView({
+                    behavior: "smooth",
+                  });
 
-            <NavLink
-
-              key={item.name}
-
-              to={item.path}
-
-              onClick={() => setMobileOpen(false)}
-
+                setMobileOpen(false);
+              }}
               className="
-              text-lg
-              text-slate-300
-              hover:text-white
-              transition-colors
+                text-left
+                text-lg
+                text-slate-300
+                hover:text-white
+                transition-colors
               "
-
             >
-
               {item.name}
-
-            </NavLink>
-
+            </button>
           ))}
 
           <div className="border-t border-white/10 pt-8 space-y-5">
 
             <Link
-
               to="/login"
-
               onClick={() => setMobileOpen(false)}
-
               className="block text-slate-300"
-
             >
-
               Login
-
             </Link>
 
             <Link
-
               to="/register"
-
               onClick={() => setMobileOpen(false)}
-
               className="
-              flex
-              items-center
-              justify-center
-
-              rounded-2xl
-
-              bg-gradient-to-r
-
-              from-blue-600
-
-              to-violet-600
-
-              py-4
-
-              font-semibold
-
-              text-white
-
+                flex
+                items-center
+                justify-center
+                rounded-2xl
+                bg-gradient-to-r
+                from-blue-600
+                to-violet-600
+                py-4
+                font-semibold
+                text-white
               "
-
             >
-
               Start Meeting
-
             </Link>
 
           </div>

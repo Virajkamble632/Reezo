@@ -1,7 +1,7 @@
 import Navbar from "../../components/layout/Navbar";
 import Hero from "../../components/home/Hero";
 import Features from "../../components/home/Features";
-import Statistics from "../../components/home/Statistics";
+import AboutReezo from "../../components/home/AboutReezo";
 import HowItWorks from "../../components/home/HowItWorks";
 import Testimonials from "../../components/home/testimonials";
 import FAQ from "../../components/home/FAQ";
@@ -14,7 +14,7 @@ const Home = () => {
       <Navbar />
       <Hero/>
       <Features/>
-      <Statistics/>
+      <AboutReezo/>
       <HowItWorks/>
       <Testimonials/>  
       <FAQ/>
