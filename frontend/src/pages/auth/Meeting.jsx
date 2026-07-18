@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import socket from "../../socket/socket";
 import { useAuth } from "../../context/AuthContext";
 
-import MeetingHeader from "../../components/meeting/MeetingHeader";
+import MeetingHeader from "../../components/meeting/meetingHeader";
 import VideoGrid from "../../components/meeting/VideoGrid";
 import MeetingControls from "../../components/meeting/MeetingControls";
 import MeetingSidebar from "../../components/meeting/MeetingSidebar";
