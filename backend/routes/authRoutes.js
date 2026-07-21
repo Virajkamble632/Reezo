@@ -11,6 +11,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword)
 
 // Protected Routes
+router.get("/profile", protect, getProfile);
 router.post('/logout', protect, logoutUser);
 
 
