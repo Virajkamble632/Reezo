@@ -25,7 +25,7 @@ const useLiveKit = (roomId, user) => {
         console.log("Requesting LiveKit Token...");
 
         const { data } = await axios.post(
-          "http://localhost:8000/api/livekit/token",
+          `${import.meta.env.VITE_API_URL}/api/livekit/token`,
           {
             roomName: roomId,
             participantName: user.name,
