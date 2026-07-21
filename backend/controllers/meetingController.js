@@ -81,9 +81,13 @@ export const joinMeeting = async(req, res) => {
         }
 
         //Add participant only if not already present
-        if(!meeting.participants.includes(req.user._id)) {
-            meeting.participants.push(req.user._id);
-            await meeting.save();
+        if (
+        !meeting.participants.some(
+            (participant) => participant.toString() === req.user._id.toString()
+        )
+        ) {
+        meeting.participants.push(req.user._id);
+        await meeting.save();
         }
 
         return res.status(202).json({
