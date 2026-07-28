@@ -41,6 +41,7 @@ const Login = () => {
       setLoading(true);
 
         const { data } = await api.post("/auth/login", formData);
+        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         setUser(data.user);
         toast.success(data.message);

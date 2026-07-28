@@ -42,15 +42,16 @@ export const registerUser = async(req, res) => {
         // Store JWT in HTTP-Only cookie
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
-        })
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
+        });
 
         res.status(201).json({
             success: true,
             message: "Registration Successfull",
-            token: genrateToken(user._id),
+            token,
             user: {
                 id: user._id,
                 name: user.name,
@@ -90,11 +91,13 @@ export const loginUser = async(req, res) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
         });
 
         res.status(200).json({
             success: true,
             message: "Login successful",
+            token,
             user: {
                     id: user._id,
                     name: user.name,
@@ -299,10 +302,10 @@ export const getProfile = async(req, res) => {
 // @access  Private
 export const logoutUser = async(req, res) => {
     res.clearCookie("token", {
-        httpOnly: true,
-        secure: false, // Change to true in production
-        sameSite: "lax",
-    });    
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });  
 
     res.status(200).json({
         success: true,

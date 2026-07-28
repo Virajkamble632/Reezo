@@ -12,10 +12,15 @@ const Dashboard = () => {
   const [roomId, setRoomId] = useState("");
   const { user } = useAuth();
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const handleCreateMeeting = async () => {
     console.log("Create Meeting clicked");
     try{
-      const { data } = await api.post('/meeting/create');
+      const { data } = await api.post('/meeting/create', {}, { headers: getAuthHeaders() });
       console.log(data);
       toast.success(data.message);
       navigate(`/meeting/${data.meeting.roomId}`);
@@ -34,7 +39,7 @@ const Dashboard = () => {
     }
 
     try{
-      const { data } = await api.post('/meeting/join', {roomId});
+      const { data } = await api.post('/meeting/join', { roomId }, { headers: getAuthHeaders() });
       toast.success(data.message);
       navigate(`/meeting/${roomId}`);
 

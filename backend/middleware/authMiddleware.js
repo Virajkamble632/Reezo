@@ -6,7 +6,12 @@ export const protect = async (req, res, next) => {
     console.log("Cookies:", req.cookies);
     console.log("Headers Cookie:", req.headers.cookie);
 
-    const token = req.cookies?.token;
+    const authHeader = req.headers.authorization;
+    const tokenFromHeader = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+    const tokenFromAltHeader = req.headers["x-auth-token"] || req.headers["x-access-token"] || req.headers.token;
+    const tokenFromBody = req.body?.token;
+    const tokenFromQuery = req.query?.token;
+    const token = req.cookies?.token || tokenFromHeader || tokenFromAltHeader || tokenFromBody || tokenFromQuery;
 
     console.log("Token:", token);
 

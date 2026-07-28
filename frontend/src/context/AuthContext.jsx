@@ -19,7 +19,13 @@ export const AuthProvider = ({ children }) => {
 
     } catch (error) {
 
-      setUser(null);
+      const status = error?.response?.status;
+
+      if (status === 401 || status === 403) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+      }
 
     } finally {
 
@@ -40,6 +46,8 @@ export const AuthProvider = ({ children }) => {
 
       await api.post("/auth/logout");
 
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setUser(null);
 
     } catch (error) {
