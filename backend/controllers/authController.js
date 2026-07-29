@@ -204,10 +204,12 @@ export const forgotPassword = async (req, res) => {
         });
 
     } catch(error){
-       return res.status(500).json({
+        console.error("Forgot Password Error:", error);
+
+        return res.status(500).json({
             success: false,
             message: error.message,
-       });
+        });
     };
 }
 
