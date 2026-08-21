@@ -23,7 +23,7 @@ const Hero = () => {
 
             
 
-        <h1 className="mt-8 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl xl:text-7xl">
+        <h1  className="mt-8 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl xl:text-7xl" aria-label="Reezo - Free Online Video Meetings">
             <span className="text-white">
                 Meet.
             </span>
