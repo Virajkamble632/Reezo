@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reezo-9si4.onrender.com/sitemap.xml
