@@ -23,25 +23,27 @@ const Hero = () => {
 
             
 
-            <h1 className="mt-8 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl xl:text-7xl">
-
-                <span className="text-white">
+        <h1 className="mt-8 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl xl:text-7xl">
+            <span className="text-white">
                 Meet.
-                </span>
-
-                <br />
-
-                <span className="text-white">
+            </span>
+        
+            <br />
+        
+            <span className="text-white">
                 Collaborate.
-                </span>
-
-                <br />
-
-                <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-violet-500 bg-clip-text text-transparent">
+            </span>
+        
+            <br />
+        
+            <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-violet-500 bg-clip-text text-transparent">
                 Build Together.
-                </span>
-
-            </h1>
+            </span>
+        
+            <span className="sr-only">
+                Free Online Video Meetings
+            </span>
+          </h1>
 
             <p className="mt-6 max-w-xl text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
 
